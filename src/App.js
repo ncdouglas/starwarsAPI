@@ -5,10 +5,12 @@ import { Container, Dimmer, Loader } from 'semantic-ui-react';
 import Home from './components/Home';
 import People from './components/People';
 import Planets from './components/Planets';
+import Species from './components/Species';
 
 function App() {
   const [people, setPeople] = useState([]);
   const [planets, setPlanets] = useState([]);
+  const [species, setSpecies] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,8 +29,16 @@ function App() {
       setLoading(false);
     }
 
+    async function fetchSpecies() {
+      let res = await fetch('https://swapi.dev/api/species/?format=json');
+      let data = await res.json();
+      setSpecies(data.results);
+      setLoading(false);
+    }
+
     fetchPeople();
     fetchPlanets();
+    fetchSpecies();
   }, []);
 
   return (
@@ -50,6 +60,9 @@ function App() {
               </Route>
               <Route exact path='/planets'>
                 <Planets data={planets}/>
+              </Route>
+              <Route exact path='/species'>
+                <Species data={species}/>
               </Route>
           </Switch>
           )}
